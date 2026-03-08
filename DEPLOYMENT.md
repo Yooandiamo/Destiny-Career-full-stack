@@ -23,6 +23,7 @@ cp .env.example .env
 - `AI_API_KEY`
 - `AI_BASE_URL`
 - `AI_MODEL`
+- `CORS_ORIGIN`（填你的前端域名，如 `https://xxx.vercel.app`）
 
 ### 4. 构建并启动
 ```bash
@@ -46,15 +47,24 @@ pm2 save
 
 ### 2. 配置环境变量
 在 Vercel Project Settings -> Environment Variables 中添加：
-- `ACCESS_CODE`
-- `AI_API_KEY`
-- `AI_BASE_URL`
-- `AI_MODEL`
+- `VITE_API_BASE_URL`（填写 Railway/Render 的后端域名）
 
 ### 3. Build 与 Start
 Vercel 会执行：
 - Build: `npm run build`
-- Runtime: 由 `server.ts` 提供 API 与静态文件
+- Runtime: 仅托管前端静态文件
+
+## Railway 快速部署后端
+
+1. 在 Railway 新建项目并连接仓库
+2. Railway 会读取 `railway.json`
+3. 在 Railway Variables 配置：
+   - `ACCESS_CODE`
+   - `AI_API_KEY`
+   - `AI_BASE_URL`
+   - `AI_MODEL`
+   - `CORS_ORIGIN`（填你的 Vercel 域名）
+4. 部署成功后获取域名，回填到 Vercel 的 `VITE_API_BASE_URL`
 
 ## 上线后自检
 

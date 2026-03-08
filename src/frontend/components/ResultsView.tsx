@@ -78,6 +78,7 @@ function QrCard() {
 }
 
 export default function ResultsView({ birth, bazi, assessment, onBack, onRestart }: ResultsViewProps) {
+  const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
   const [accessCode, setAccessCode] = useState(localStorage.getItem('destiny-career-access-code') || '');
   const [loading, setLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -100,7 +101,7 @@ export default function ResultsView({ birth, bazi, assessment, onBack, onRestart
     }, 350);
 
     try {
-      const response = await fetch('/api/analyze', {
+      const response = await fetch(`${apiBaseUrl}/api/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

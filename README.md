@@ -22,6 +22,11 @@ npm install
 npm run dev
 ```
 
+4. 前后端分离部署时，请在前端环境变量中设置：
+```bash
+VITE_API_BASE_URL=https://your-api-domain.com
+```
+
 ## 生产构建
 
 ```bash
@@ -38,6 +43,7 @@ npm run start
 - `src/backend/api/analyze.ts`：AI 报告接口与 Prompt 逻辑
 - `src/utils/baziCalculator.ts`：八字排盘与五行统计
 - `src/utils/pdfExporter.ts`：报告 PDF 导出
+- `railway.json`：Railway 部署配置
 
 ## 部署
 
