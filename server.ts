@@ -35,6 +35,15 @@ function parseAllowedOrigins() {
     .filter(Boolean);
 }
 
+async function fileExists(filePath: string) {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function bootstrap() {
   const app = express();
 
@@ -92,11 +101,25 @@ async function bootstrap() {
 
   if (process.env.NODE_ENV === 'production') {
     const clientDist = path.resolve(root, 'dist/client');
-    app.use(express.static(clientDist, { maxAge: '7d', index: false }));
-    app.get('*', async (_req, res) => {
-      const html = await fs.readFile(path.join(clientDist, 'index.html'), 'utf-8');
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
-    });
+    const indexPath = path.join(clientDist, 'index.html');
+    const hasFrontendBundle = await fileExists(indexPath);
+
+    if (hasFrontendBundle) {
+      app.use(express.static(clientDist, { maxAge: '7d', index: false }));
+      app.get('*', async (_req, res) => {
+        const html = await fs.readFile(indexPath, 'utf-8');
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+      });
+    } else {
+      app.get('/', (_req, res) => {
+        res.json({
+          ok: true,
+          app: 'destiny-career',
+          mode: 'api-only',
+          message: 'Frontend bundle not found. API service is running.'
+        });
+      });
+    }
   } else {
     const vite = await createViteServer({
       root,
